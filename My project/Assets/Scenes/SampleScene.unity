@@ -1086,7 +1086,6 @@ GameObject:
   - component: {fileID: 1220613844}
   - component: {fileID: 1220613843}
   - component: {fileID: 1220613842}
-  - component: {fileID: 1220613845}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1155,22 +1154,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1220613845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1220613841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90ecb65ac075a8a42b88acd0c2a59f6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  playDuration: 60
-  countdownText: {fileID: 617737994}
-  endGameText: {fileID: 981447254}
-  freezeTimeOnEnd: 1
 --- !u!1 &1263256864
 GameObject:
   m_ObjectHideFlags: 0
@@ -1523,9 +1506,15 @@ MonoBehaviour:
   soldierRescueText: {fileID: 1799374019}
   rescueTarget: {fileID: 1535494580}
   rescueTargetCollider: {fileID: 1535494584}
+  playerTransform: {fileID: 1535494580}
+  gameManager: {fileID: 2149000003}
   soldierLifeTime: 10
   soldierRescueDuration: 3
-  spawnInterval: 2
+  initialSpawnInterval: 2
+  minSpawnInterval: 0.5
+  spawnIntervalDecrement: 0.15
+  minSpawnDistanceFromPlayer: 3
+  spawnPositionMaxAttempts: 20
 --- !u!4 &1451698685
 Transform:
   m_ObjectHideFlags: 0
@@ -1553,6 +1542,7 @@ GameObject:
   - component: {fileID: 1535494581}
   - component: {fileID: 1535494584}
   - component: {fileID: 1535494582}
+  - component: {fileID: 1535494585}
   - component: {fileID: 1535494583}
   m_Layer: 0
   m_Name: Player
@@ -1718,6 +1708,23 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.16586304, y: 0.16586351}
   m_EdgeRadius: 0
+--- !u!114 &1535494585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1535494579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4e9c0f5e6d742e4a2c4f9f2040a9d11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  maxHealth: 10
+  damagePerSecondWhileInDangerZone: 1
+  healthText: {fileID: 0}
+  gameManager: {fileID: 2149000003}
+  playerCollider: {fileID: 1535494584}
 --- !u!1 &1607621361
 GameObject:
   m_ObjectHideFlags: 0
@@ -2105,6 +2112,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1799374017}
   m_CullTransparentMesh: 1
+--- !u!1 &1865000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1865000002}
+  - component: {fileID: 1865000003}
+  m_Layer: 0
+  m_Name: DangerZoneSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1865000002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865000001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1865000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8f2a13c4d5e4a91a3b27c8d09e6f512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DangerZoneSpawner
+  dangerZonePrefab: {fileID: 1377026109481491180, guid: 32cec9a532780a34093f28e6f6462172, type: 3}
+  spawnArea: {fileID: 1337528557}
+  gameManager: {fileID: 2149000003}
+  dangerZoneLifetime: 15
+  maxActiveDangerZones: 5
+  minSpawnInterval: 0.5
+  maxSpawnInterval: 1.25
+  initialSpawnDelayMin: 0.25
+  initialSpawnDelayMax: 1
 --- !u!1 &2021153728
 GameObject:
   m_ObjectHideFlags: 0
@@ -2245,8 +2305,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   playDuration: 60
+  maxSoldierDeaths: 3
   countdownText: {fileID: 617737994}
+  winUI: {fileID: 0}
+  loseUI: {fileID: 0}
   endGameText: {fileID: 981447254}
+  winMessage: YOU WIN
+  loseMessage: YOU LOSE
   freezeTimeOnEnd: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -2264,3 +2329,4 @@ SceneRoots:
   - {fileID: 1263256868}
   - {fileID: 1220613844}
   - {fileID: 2149000002}
+  - {fileID: 1865000002}
